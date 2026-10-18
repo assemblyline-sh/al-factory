@@ -21,7 +21,7 @@ import { makeWorkpiece, makeBinDir, writeStationDefs } from '../fixtures/station
 // ============================================================================
 
 /**
- * Load line state the way the CLI does: from the worker repo root (the
+ * Load line state the way the CLI does: from the factory repo root (the
  * parent of stations_root), with station files describing the topology.
  */
 function load(stations_root) {

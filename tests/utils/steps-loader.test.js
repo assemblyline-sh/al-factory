@@ -2,9 +2,9 @@ import { jest, describe, it, expect } from '@jest/globals';
 
 const mockCreateHandler = jest.fn();
 
-jest.unstable_mockModule('../../src/utils/lib-worker-loader.js', () => ({
-  loadLibWorker: jest.fn(),
-  getLibWorker: () => ({ createHandler: mockCreateHandler }),
+jest.unstable_mockModule('../../src/utils/lib-factory-loader.js', () => ({
+  loadLibFactory: jest.fn(),
+  getLibFactory: () => ({ createHandler: mockCreateHandler }),
 }));
 
 const { findPreviousStep, getHandler } = await import('../../src/utils/steps-loader.js');
@@ -53,7 +53,7 @@ describe('getHandler()', () => {
     expect(result).toBeNull();
   });
 
-  it('should build the handler with lib-worker createHandler()', () => {
+  it('should build the handler with lib-factory createHandler()', () => {
     const step = { slug: 'acme/fetch' };
     const handler = async () => ({});
     mockCreateHandler.mockReturnValue(handler);

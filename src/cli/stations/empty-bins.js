@@ -8,14 +8,14 @@ import {
   confirmWipe,
 } from '../shared/empty-bins.js';
 
-const USAGE = 'Usage: fob-worker stations empty-bins <short_code> [--all | --all-bins | --input | --doing | --output | --failed | --done | --intake-registry] [--yes]';
+const USAGE = 'Usage: al-factory stations empty-bins <short_code> [--all | --all-bins | --input | --doing | --output | --failed | --done | --intake-registry] [--yes]';
 
 /**
- * `fob-worker stations empty-bins <short_code>` — wipe selected bin dirs (and
+ * `al-factory stations empty-bins <short_code>` — wipe selected bin dirs (and
  * optionally the intake-registry.jsonl) under temp/stations/<STATION>/.
  *
  * Resolves the station against the loaded line state so we share the same
- * topology source as `fob-worker stations status`.
+ * topology source as `al-factory stations status`.
  */
 export async function emptyBinsStationHandler(argv) {
   const { id } = argv;
@@ -40,7 +40,7 @@ export async function emptyBinsStationHandler(argv) {
   }
   if (!line_state) {
     console.error(`No station "${id}" on disk under temp/stations/.`);
-    console.error('Pass the station short_code (e.g. IG0). Run `fob-worker lines status` to see active lines.');
+    console.error('Pass the station short_code (e.g. IG0). Run `al-factory lines status` to see active lines.');
     process.exit(1);
   }
 

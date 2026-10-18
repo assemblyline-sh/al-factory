@@ -91,8 +91,8 @@ export function localTzLabel() {
  *
  * **Local, not UTC.** This used to print `toISOString()` verbatim, so an
  * operator in IST read every timestamp 5.5 hours early with nothing on screen
- * saying so — and everything a worker CLI is compared against (`pm2 logs`, file
- * mtimes, `fob orc` output) is local. Kept identical to fob-orc's helper so the
+ * saying so — and everything a factory CLI is compared against (`pm2 logs`, file
+ * mtimes, `al-orc` output) is local. Kept identical to al-orc's helper so the
  * two CLIs never disagree about the same instant.
  *
  * Pair with `localTzLabel()` in the surrounding header so the zone is stated
@@ -109,7 +109,7 @@ export function formatDate(iso) {
  * Wall-clock time only, for append-style feeds where the date is implied by the
  * session: "15:53:01".
  *
- * Accepts an ISO string or a `Date` (`fob-worker workpieces watch` stamps
+ * Accepts an ISO string or a `Date` (`al-factory workpieces watch` stamps
  * `new Date()` as each event arrives).
  *
  * @param {string|Date|null|undefined} iso

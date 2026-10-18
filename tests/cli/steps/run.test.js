@@ -4,7 +4,7 @@ import { captureOutput, ExitError } from '../helpers.js';
 
 const mockLoadConfig = jest.fn();
 const mockEnsureTempDir = jest.fn();
-const mockLoadLibWorker = jest.fn();
+const mockLoadLibFactory = jest.fn();
 const mockInitTemplates = jest.fn();
 const mockResolveConfig = jest.fn();
 const mockLoadSteps = jest.fn();
@@ -23,8 +23,8 @@ jest.unstable_mockModule('../../../src/utils/config.js', () => ({
   ensureTempDir: mockEnsureTempDir,
 }));
 
-jest.unstable_mockModule('../../../src/utils/lib-worker-loader.js', () => ({
-  loadLibWorker: mockLoadLibWorker,
+jest.unstable_mockModule('../../../src/utils/lib-factory-loader.js', () => ({
+  loadLibFactory: mockLoadLibFactory,
 }));
 
 jest.unstable_mockModule('../../../src/utils/steps-loader.js', () => ({
@@ -62,7 +62,7 @@ describe('runStepHandler()', () => {
       stepsDir: path.join(process.cwd(), 'src/steps'),
       tempDir: path.join(process.cwd(), 'temp'),
     });
-    mockLoadLibWorker.mockResolvedValue({
+    mockLoadLibFactory.mockResolvedValue({
       initTemplates: mockInitTemplates,
       resolveConfig: mockResolveConfig,
     });

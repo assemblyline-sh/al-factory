@@ -1,18 +1,18 @@
 import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { captureOutput, ExitError } from '../helpers.js';
 
-const mockResolveRunningWorker = jest.fn();
+const mockResolveRunningSession = jest.fn();
 const mockExecFileSync = jest.fn();
 
-jest.unstable_mockModule('../../../src/utils/worker-processes.js', () => ({
-  resolveRunningWorker: mockResolveRunningWorker,
+jest.unstable_mockModule('../../../src/utils/factory-processes.js', () => ({
+  resolveRunningSession: mockResolveRunningSession,
 }));
 
 jest.unstable_mockModule('child_process', () => ({
   execFileSync: mockExecFileSync,
 }));
 
-const { stopWorkerHandler, requirePm2Target } = await import('../../../src/cli/procs/stop.js');
+const { stopSessionHandler, requirePm2Target } = await import('../../../src/cli/procs/stop.js');
 
 describe('requirePm2Target()', () => {
   let out;
@@ -26,18 +26,18 @@ describe('requirePm2Target()', () => {
     out.restore();
   });
 
-  it('should exit 1 when no running worker matches the target', () => {
+  it('should exit 1 when no running factory session matches the target', () => {
     // Arrange
-    mockResolveRunningWorker.mockReturnValue(null);
+    mockResolveRunningSession.mockReturnValue(null);
 
     // Act & Assert
     expect(() => requirePm2Target({ target: 'nope' })).toThrow(ExitError);
-    expect(out.stderr).toContain('No running worker matches "nope"');
+    expect(out.stderr).toContain('No running factory session matches "nope"');
   });
 
   it('should exit 1 when the match is running directly, not under pm2', () => {
     // Arrange
-    mockResolveRunningWorker.mockReturnValue({ worker: 'worker-alex', pid: '123', mode: 'direct' });
+    mockResolveRunningSession.mockReturnValue({ factory: 'factory-alex', pid: '123', mode: 'direct' });
 
     // Act & Assert
     expect(() => requirePm2Target({})).toThrow(ExitError);
@@ -47,8 +47,8 @@ describe('requirePm2Target()', () => {
 
   it('should return the match when it is pm2-managed', () => {
     // Arrange
-    const match = { worker: 'worker-alex', pid: '123', mode: 'pm2', pm2: 'worker-alex' };
-    mockResolveRunningWorker.mockReturnValue(match);
+    const match = { factory: 'factory-alex', pid: '123', mode: 'pm2', pm2: 'factory-alex' };
+    mockResolveRunningSession.mockReturnValue(match);
 
     // Act
     const result = requirePm2Target({});
@@ -58,7 +58,7 @@ describe('requirePm2Target()', () => {
   });
 });
 
-describe('stopWorkerHandler()', () => {
+describe('stopSessionHandler()', () => {
   let out;
 
   beforeEach(() => {
@@ -72,12 +72,12 @@ describe('stopWorkerHandler()', () => {
 
   it('should call pm2 stop with the resolved pm2 name', async () => {
     // Arrange
-    mockResolveRunningWorker.mockReturnValue({ worker: 'worker-alex', pid: '123', mode: 'pm2', pm2: 'worker-alex' });
+    mockResolveRunningSession.mockReturnValue({ factory: 'factory-alex', pid: '123', mode: 'pm2', pm2: 'factory-alex' });
 
     // Act
-    await stopWorkerHandler({});
+    await stopSessionHandler({});
 
     // Assert
-    expect(mockExecFileSync).toHaveBeenCalledWith('pm2', ['stop', 'worker-alex'], expect.objectContaining({ stdio: 'inherit' }));
+    expect(mockExecFileSync).toHaveBeenCalledWith('pm2', ['stop', 'factory-alex'], expect.objectContaining({ stdio: 'inherit' }));
   });
 });

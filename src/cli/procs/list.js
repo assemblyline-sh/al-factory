@@ -1,9 +1,9 @@
-import { listRunningWorkers } from '../../utils/worker-processes.js';
+import { listRunningSessions } from '../../utils/factory-processes.js';
 import { formatTable } from '../../utils/format.js';
 
-export async function listWorkersHandler(argv) {
+export async function listSessionsHandler(argv) {
   const { json } = argv || {};
-  const rows = listRunningWorkers();
+  const rows = listRunningSessions();
 
   if (json) {
     console.log(JSON.stringify(rows, null, 2));
@@ -11,11 +11,11 @@ export async function listWorkersHandler(argv) {
   }
 
   if (rows.length === 0) {
-    console.log('No running fob workers found.');
+    console.log('No running factory sessions found.');
     return;
   }
 
-  const headers = ['PID', 'WORKER', 'MODE', 'PM2', 'PORT', 'UPTIME', 'STARTED'];
-  const table = rows.map((r) => [r.pid, r.worker, r.mode, r.pm2, r.port, r.uptime, r.started]);
+  const headers = ['PID', 'FACTORY', 'MODE', 'PM2', 'PORT', 'UPTIME', 'STARTED'];
+  const table = rows.map((r) => [r.pid, r.factory, r.mode, r.pm2, r.port, r.uptime, r.started]);
   console.log(formatTable(headers, table));
 }

@@ -10,19 +10,19 @@ import { formatDate, localTzLabel } from '../../utils/format.js';
 import { listWorkpiecesHandler } from './list.js';
 
 /**
- * `fob-worker workpieces show <id-or-substring>` — single-workpiece depth view.
+ * `al-factory workpieces show <id-or-substring>` — single-workpiece depth view.
  *
  * Renders: position label, journey from log.jsonl with computed durations,
  * and a Cmd-clickable file:// folder link to the workpiece dir.
  *
  * Substring resolving to >1 id auto-promotes to the dashboard via
- * `fob-worker workpieces list --match <substring>`. To force the single view,
+ * `al-factory workpieces list --match <substring>`. To force the single view,
  * pass the full id.
  */
 export async function showWorkpieceHandler(argv) {
   const { id: query, json } = argv;
   if (!query) {
-    console.error('Usage: fob-worker workpieces show <id-or-substring>');
+    console.error('Usage: al-factory workpieces show <id-or-substring>');
     process.exit(1);
   }
 
@@ -57,7 +57,7 @@ export async function showWorkpieceHandler(argv) {
   }
 
   renderWorkpiece(resolved.id, pos);
-  console.log(`\nRun \`fob-worker workpieces watch ${resolved.id}\` to tail this workpiece live.`);
+  console.log(`\nRun \`al-factory workpieces watch ${resolved.id}\` to tail this workpiece live.`);
 }
 
 function resolveQueryToId(query, lines) {

@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: A command or option fob-worker doesn't support yet
+about: A command or option al-factory doesn't support yet
 labels: enhancement
 ---
 

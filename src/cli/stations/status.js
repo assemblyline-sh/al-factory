@@ -3,7 +3,7 @@ import { loadLineState, LIVE_BINS } from '../../utils/line-state.js';
 import { watchRender, DEFAULT_WATCH_INTERVAL_SECS } from '../../utils/watch-render.js';
 
 /**
- * `fob-worker stations status <code>` — single-station operational drilldown: per-bin
+ * `al-factory stations status <code>` — single-station operational drilldown: per-bin
  * workpiece ids read from temp/stations/.
  *
  * Resolves the argument directly against on-disk station short_codes — no
@@ -15,7 +15,7 @@ import { watchRender, DEFAULT_WATCH_INTERVAL_SECS } from '../../utils/watch-rend
 export async function statusStationHandler(argv) {
   const { id, json, watch, interval } = argv;
   if (!id) {
-    console.error('Usage: fob-worker stations status <short_code>');
+    console.error('Usage: al-factory stations status <short_code>');
     process.exit(1);
   }
   if (watch && json) {
@@ -37,7 +37,7 @@ export async function statusStationHandler(argv) {
         return;
       }
       console.error(`No station "${id}" on disk under temp/stations/.`);
-      console.error('Pass the station short_code (e.g. VM3). Run `fob-worker lines status` to see active lines.');
+      console.error('Pass the station short_code (e.g. VM3). Run `al-factory lines status` to see active lines.');
       process.exit(1);
     }
 

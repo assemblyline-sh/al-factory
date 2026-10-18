@@ -27,7 +27,7 @@ fob supporting-docs ...
 fob tags ...
 fob config ...
 fob orchestrator ...
-fob workers ...
+fob factory sessions ...
 ```
 
 Typing `fob <resource>` shows all available actions for that resource.
@@ -38,16 +38,16 @@ Actions are verbs that operate on a resource. Standard actions:
 
 | Action | Purpose | Example |
 |--------|---------|---------|
-| `list` | List all instances | `fob-orc stations list` |
-| `show` | Show one instance in detail (definitional) | `fob-orc stations show <id>` |
-| `status` | Snapshot of live operational state | `fob-worker lines status VM` |
-| `watch` | Live tail; append-style streaming | `fob-worker workpieces watch <id>` |
+| `list` | List all instances | `al-orc stations list` |
+| `show` | Show one instance in detail (definitional) | `al-orc stations show <id>` |
+| `status` | Snapshot of live operational state | `al-factory lines status VM` |
+| `watch` | Live tail; append-style streaming | `al-factory workpieces watch <id>` |
 | `create` | Create a new instance | `fob tags create <name>` |
-| `edit` | Modify an existing instance | `fob-orc stations edit <id> --add-tag x` |
+| `edit` | Modify an existing instance | `al-orc stations edit <id> --add-tag x` |
 | `delete` | Remove an instance | `fob tags delete <id>` |
-| `pull` | Download from orchestrator to local | `fob-orc stations pull <id>` |
-| `push` | Upload from local to orchestrator | `fob-orc stations push <id>` |
-| `run` | Execute (locally or remote) | `fob-worker steps run <slug>`, `fob-orc stations run <id>` |
+| `pull` | Download from orchestrator to local | `al-orc stations pull <id>` |
+| `push` | Upload from local to orchestrator | `al-orc stations push <id>` |
+| `run` | Execute (locally or remote) | `al-factory steps run <slug>`, `al-orc stations run <id>` |
 
 Not every resource needs every action. Only add what's useful.
 
@@ -63,7 +63,7 @@ Precedent: `gh run watch`, `kubectl get --watch`, `systemctl status`, `git statu
 
 ### Reserved verbs
 
-- **`monit`** — reserved for an interactive TUI (pm2-style). Do not use for one-shot snapshots; that's what `status` is for. Implemented on `fob workers monit` (execs `pm2 monit` directly).
+- **`monit`** — reserved for an interactive TUI (pm2-style). Do not use for one-shot snapshots; that's what `status` is for. Implemented on `fob factory sessions monit` (execs `pm2 monit` directly).
 
 ## Explicit Actions — No Inference
 
@@ -72,11 +72,11 @@ Always require the action. Never infer it from arguments.
 ```bash
 # Correct
 fob steps list
-fob-worker steps run acme/fetch_data
+al-factory steps run acme/fetch_data
 
 # Wrong — no default action
 fob steps                        # shows help, does NOT default to list
-fob-worker steps acme/fetch_data        # error, does NOT infer "run"
+al-factory steps acme/fetch_data        # error, does NOT infer "run"
 ```
 
 This eliminates ambiguity and makes scripts self-documenting.
@@ -131,7 +131,7 @@ fob tags delete <id>                             # Delete a tag
 fob stations edit <id> --add-tag high-priority   # Link tag to station
 ```
 
-These are separate because they do different things. `fob tags create` creates the tag definition. `fob-orc stations edit --add-tag` creates the association.
+These are separate because they do different things. `fob tags create` creates the tag definition. `al-orc stations edit --add-tag` creates the association.
 
 ## Options
 
@@ -191,8 +191,7 @@ fob
 │   └── run <slug>                        Run a step locally
 │       ├── --station <id>                Use config from station
 │       ├── --scenario <name>             Use config from scenario file
-│       ├── --empty                       Use empty config
-│       └── --item <id>                   Fetch item from orchestrator for item_snapshot
+│       └── --empty                       Use empty config
 ├── stations
 │   ├── list                              List stations from orchestrator
 │   │   ├── --tag <name>                  Filter by tag
@@ -279,13 +278,13 @@ fob
 │   └── show                              Show current configuration
 ├── orchestrator
 │   └── status                            Check orchestrator connection
-├── workers
-│   ├── list                              List locally running fob workers (this machine)
+├── factory sessions
+│   ├── list                              List locally running fob factory sessions (this machine)
 │   │   └── --json                        Output raw JSON
-│   ├── start [target]                    Start a worker under pm2 (target: path, default cwd)
-│   ├── stop [target]                     Stop a pm2-managed worker (target: pm2 name or dirname, default cwd)
-│   ├── restart [target]                  Restart a pm2-managed worker (same target resolution)
-│   ├── logs [target]                     Tail logs for a pm2-managed worker (execs `pm2 logs`)
+│   ├── start [target]                    Start a factory session under pm2 (target: path, default cwd)
+│   ├── stop [target]                     Stop a pm2-managed factory (target: pm2 name or dirname, default cwd)
+│   ├── restart [target]                  Restart a pm2-managed factory (same target resolution)
+│   ├── logs [target]                     Tail logs for a pm2-managed factory (execs `pm2 logs`)
 │   └── monit                             Interactive pm2 process monitor (execs `pm2 monit`)
 └── completion                            Output shell completion script
 ```
@@ -293,4 +292,4 @@ fob
 ## Related
 
 - [Architecture](/docs/architecture/) — Internal design notes
-- [Workers docs](https://finopsbricks.com/docs/workers) — user guides
+- [Factory sessions docs](https://assemblyline.sh/docs) — user guides

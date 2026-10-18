@@ -9,10 +9,10 @@ import {
 import { formatHeader, formatField, formatTable, formatSection } from '../../utils/format.js';
 
 /**
- * `fob-worker lines show <line>` — definitional view of a line: stations in dependency
+ * `al-factory lines show <line>` — definitional view of a line: stations in dependency
  * order, plus conveyor topology. Derived from local station JSON files.
  *
- * For the operational view (live bin counts), use `fob-worker lines status <line>`.
+ * For the operational view (live bin counts), use `al-factory lines status <line>`.
  */
 export async function showLineHandler(argv) {
   const { line: lineArg, json } = argv;
@@ -22,7 +22,7 @@ export async function showLineHandler(argv) {
   const members = stations.filter(s => s.line === lineArg);
   if (members.length === 0 && !line_def) {
     console.error(`Line not found locally: ${lineArg}`);
-    console.error('Run "fob-worker lines list" to see available lines.');
+    console.error('Run "al-factory lines list" to see available lines.');
     process.exit(1);
   }
 
@@ -37,7 +37,7 @@ export async function showLineHandler(argv) {
 
   console.log(formatHeader('Line', lineArg));
   if (line_def?.name && line_def.name !== lineArg) console.log(formatField('Name', line_def.name, 12));
-  console.log(formatField('Location', line_def?.location ?? '(no line file — run "fob-orc lines pull --all")', 12));
+  console.log(formatField('Location', line_def?.location ?? '(no line file — run "al-orc lines pull --all")', 12));
   if (line_def?.description) console.log(formatField('Description', line_def.description, 12));
   console.log(formatField('Stations', String(members.length), 12));
   console.log('');
@@ -63,7 +63,7 @@ export async function showLineHandler(argv) {
   const conveyors = [];
   for (const m of ordered) {
     for (const step of m.data.steps || []) {
-      if (step.slug === 'lib-worker:move_files' && step.config) {
+      if (step.slug === 'lib-factory:move_files' && step.config) {
         conveyors.push({
           station: codeOf(m),
           from: step.config.source_bin,
@@ -82,5 +82,5 @@ export async function showLineHandler(argv) {
   }
 
   console.log('');
-  console.log(`Run \`fob-worker lines status ${lineArg}\` for live bin counts.`);
+  console.log(`Run \`al-factory lines status ${lineArg}\` for live bin counts.`);
 }

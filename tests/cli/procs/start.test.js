@@ -1,14 +1,14 @@
 import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { captureOutput, ExitError } from '../helpers.js';
 
-const mockListRunningWorkers = jest.fn();
-const mockGetWorkerPackageInfo = jest.fn();
+const mockListRunningSessions = jest.fn();
+const mockGetFactoryPackageInfo = jest.fn();
 const mockIsPm2Available = jest.fn();
 const mockExecFileSync = jest.fn();
 
-jest.unstable_mockModule('../../../src/utils/worker-processes.js', () => ({
-  listRunningWorkers: mockListRunningWorkers,
-  getWorkerPackageInfo: mockGetWorkerPackageInfo,
+jest.unstable_mockModule('../../../src/utils/factory-processes.js', () => ({
+  listRunningSessions: mockListRunningSessions,
+  getFactoryPackageInfo: mockGetFactoryPackageInfo,
   isPm2Available: mockIsPm2Available,
 }));
 
@@ -16,15 +16,15 @@ jest.unstable_mockModule('child_process', () => ({
   execFileSync: mockExecFileSync,
 }));
 
-const { startWorkerHandler } = await import('../../../src/cli/procs/start.js');
+const { startSessionHandler } = await import('../../../src/cli/procs/start.js');
 
-describe('startWorkerHandler()', () => {
+describe('startSessionHandler()', () => {
   let out;
 
   beforeEach(() => {
     jest.clearAllMocks();
     out = captureOutput();
-    mockListRunningWorkers.mockReturnValue([]);
+    mockListRunningSessions.mockReturnValue([]);
     mockIsPm2Available.mockReturnValue(true);
   });
 
@@ -32,51 +32,51 @@ describe('startWorkerHandler()', () => {
     out.restore();
   });
 
-  it('should exit 1 when the target is not a fob worker repo', async () => {
+  it('should exit 1 when the target is not a factory repo', async () => {
     // Arrange
-    mockGetWorkerPackageInfo.mockReturnValue(null);
+    mockGetFactoryPackageInfo.mockReturnValue(null);
 
     // Act & Assert
-    await expect(startWorkerHandler({ target: '/some/random/dir' })).rejects.toThrow(ExitError);
-    expect(out.stderr).toContain("doesn't look like a fob worker repo");
+    await expect(startSessionHandler({ target: '/some/random/dir' })).rejects.toThrow(ExitError);
+    expect(out.stderr).toContain("doesn't look like a factory repo");
     expect(mockExecFileSync).not.toHaveBeenCalled();
   });
 
-  it('should exit 1 when the worker is already running', async () => {
+  it('should exit 1 when the factory session is already running', async () => {
     // Arrange
-    mockGetWorkerPackageInfo.mockReturnValue({ main: 'src/index.js' });
-    mockListRunningWorkers.mockReturnValue([
-      { pid: '999', worker: 'worker-alex', mode: 'pm2', cwd: '/workers/worker-alex' },
+    mockGetFactoryPackageInfo.mockReturnValue({ main: 'src/index.js' });
+    mockListRunningSessions.mockReturnValue([
+      { pid: '999', factory: 'factory-alex', mode: 'pm2', cwd: '/factories/factory-alex' },
     ]);
 
     // Act & Assert
-    await expect(startWorkerHandler({ target: '/workers/worker-alex' })).rejects.toThrow(ExitError);
+    await expect(startSessionHandler({ target: '/factories/factory-alex' })).rejects.toThrow(ExitError);
     expect(out.stderr).toContain('already running (pid 999, mode pm2)');
     expect(mockExecFileSync).not.toHaveBeenCalled();
   });
 
   it('should exit 1 with a friendly message when pm2 is not installed', async () => {
     // Arrange
-    mockGetWorkerPackageInfo.mockReturnValue({ main: 'src/index.js' });
+    mockGetFactoryPackageInfo.mockReturnValue({ main: 'src/index.js' });
     mockIsPm2Available.mockReturnValue(false);
 
     // Act & Assert
-    await expect(startWorkerHandler({ target: '/workers/worker-alex' })).rejects.toThrow(ExitError);
+    await expect(startSessionHandler({ target: '/factories/factory-alex' })).rejects.toThrow(ExitError);
     expect(out.stderr).toContain('pm2 not found');
   });
 
-  it('should start the worker under pm2 with the directory basename as name and cwd', async () => {
+  it('should start the factory session under pm2 with the directory basename as name and cwd', async () => {
     // Arrange
-    mockGetWorkerPackageInfo.mockReturnValue({ main: 'src/index.js' });
+    mockGetFactoryPackageInfo.mockReturnValue({ main: 'src/index.js' });
 
     // Act
-    await startWorkerHandler({ target: '/workers/worker-alex' });
+    await startSessionHandler({ target: '/factories/factory-alex' });
 
     // Assert
     expect(mockExecFileSync).toHaveBeenCalledWith(
       'pm2',
-      ['start', 'src/index.js', '--name', 'worker-alex'],
-      expect.objectContaining({ cwd: '/workers/worker-alex' }),
+      ['start', 'src/index.js', '--name', 'factory-alex'],
+      expect.objectContaining({ cwd: '/factories/factory-alex' }),
     );
   });
 });

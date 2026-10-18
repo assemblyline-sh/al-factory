@@ -160,7 +160,7 @@ describe('saveStation() + loadStation() + listLocalStationIds()', () => {
   });
 
   it('should not read stations from the legacy .orchestrator/processes/ directory', () => {
-    // Arrange — a worker repo that pulled before the rename should re-pull,
+    // Arrange — a factory repo that pulled before the rename should re-pull,
     // not get silent reads from the legacy location.
     fs.mkdirSync('.orchestrator/processes', { recursive: true });
     fs.writeFileSync(

@@ -7,7 +7,7 @@ import { captureOutput, ExitError } from '../helpers.js';
 import { watchHandler } from '../../../src/cli/workpieces/watch.js';
 
 
-// These tests exercise the routing logic of `fob-worker workpieces watch` —
+// These tests exercise the routing logic of `al-factory workpieces watch` —
 // specifically: scope validation, error paths, and what happens before
 // the watch loop starts. The loop itself runs forever, so we don't
 // exercise it here (tested manually + via line-state.test.js).
@@ -37,7 +37,7 @@ describe('watchHandler() — routing', () => {
   it('should exit with a usage message when no scope flag and no id is provided', async () => {
     // Act + Assert
     await expect(watchHandler({})).rejects.toBeInstanceOf(ExitError);
-    expect(out.stderr).toMatch(/Usage: fob-worker workpieces watch/);
+    expect(out.stderr).toMatch(/Usage: al-factory workpieces watch/);
   });
 
   it('should exit when the workpiece id matches nothing', async () => {

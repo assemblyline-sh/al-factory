@@ -3,11 +3,11 @@ import { topoSortStations, codeOf } from '../../utils/line-state.js';
 import { formatTable } from '../../utils/format.js';
 
 /**
- * `fob-worker lines list` — derive lines from local station JSON files.
+ * `al-factory lines list` — derive lines from local station JSON files.
  *
  * Definitional view: groups stations by their `line` field and shows the
  * line's name and location (from `.orchestrator/lines/<CODE>.json`), count +
- * member short_codes. For operational/live state, use `fob-worker lines status`.
+ * member short_codes. For operational/live state, use `al-factory lines status`.
  */
 export async function listLinesHandler(argv) {
   const { json } = argv || {};
@@ -20,7 +20,7 @@ export async function listLinesHandler(argv) {
       return;
     }
     console.log('No local station files found.');
-    console.log('Run "fob-orc stations pull --all" to fetch from orchestrator.');
+    console.log('Run "al-orc stations pull --all" to fetch from orchestrator.');
     return;
   }
 
@@ -75,7 +75,7 @@ export async function listLinesHandler(argv) {
   console.log('');
   console.log(`Total: ${groups.size} lines, ${stations.length} stations`);
   if (Object.keys(line_defs).length === 0) {
-    console.log('No line files found in .orchestrator/lines/ — run "fob-orc lines pull --all".');
+    console.log('No line files found in .orchestrator/lines/ — run "al-orc lines pull --all".');
   }
-  console.log('Run `fob-worker lines status` for live bin counts.');
+  console.log('Run `al-factory lines status` for live bin counts.');
 }

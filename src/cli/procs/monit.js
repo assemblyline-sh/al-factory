@@ -1,6 +1,6 @@
 import { execFileSync } from 'child_process';
 
-export async function monitWorkersHandler() {
+export async function monitSessionsHandler() {
   try {
     execFileSync('pm2', ['monit'], { stdio: 'inherit' });
   } catch (error) {

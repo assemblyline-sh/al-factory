@@ -115,7 +115,7 @@ export function scanBinWorkpieces(bin_dir) {
 
 /**
  * Default stations_root: `temp/stations/` relative to cwd. The CLI runs from
- * a worker repo's root; that's where `temp/stations/` lives.
+ * a factory repo's root; that's where `temp/stations/` lives.
  */
 export function defaultStationsRoot() {
   return path.resolve(process.cwd(), 'temp', 'stations');

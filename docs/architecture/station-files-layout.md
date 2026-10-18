@@ -1,6 +1,6 @@
 # Station Files Layout
 
-How station definitions and test scenarios are stored in the worker directory.
+How station definitions and test scenarios are stored in the factory session directory.
 
 > The orchestrator API and database still use the term "process". URL paths and JSON field names keep that wording — only the local directory and file naming use "station".
 
@@ -23,11 +23,11 @@ How station definitions and test scenarios are stored in the worker directory.
 
 ## .gitignore
 
-`.orchestrator/` contains worker-specific local state (pulled from the orchestrator for a specific org). It should be in `.gitignore` and is not committed to the worker repo.
+`.orchestrator/` contains factory-specific local state (pulled from the orchestrator for a specific org). It should be in `.gitignore` and is not committed to the factory repo.
 
 ## Line Files
 
-One file per line, named by its code: `.orchestrator/lines/<CODE>.json`. A line owns the worker `location`; every station names its line by `code` and inherits the location from it. `@fob/lib-worker` refuses to boot without this directory. Pull with `fob-orc lines pull --all` (also done by `fob-orc stations pull --all`).
+One file per line, named by its code: `.orchestrator/lines/<CODE>.json`. A line owns the `location`; every station names its line by `code` and inherits the location from it. `@assemblyline/lib-factory` refuses to boot without this directory. Pull with `al-orc lines pull --all` (also done by `al-orc stations pull --all`).
 
 ## Station File Naming
 
@@ -54,4 +54,4 @@ Full station definition JSON as returned by the orchestrator API, including `id`
 - [Module Structure](/docs/architecture/module-structure.md)
 - [Task Construction](/docs/architecture/task-construction.md)
 - [Template Resolution](/docs/architecture/template-resolution.md)
-- [Scenarios](https://finopsbricks.com/docs/workers/run-steps#scenarios)
+- [Scenarios](https://assemblyline.sh/docs/run-steps#scenarios)

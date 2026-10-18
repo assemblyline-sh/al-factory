@@ -7,7 +7,7 @@ import { ALL_BINS, defaultStationsRoot } from '../../utils/line-state.js';
 import { formatHeader, formatTable } from '../../utils/format.js';
 
 /**
- * Shared core for `fob-worker stations empty-bins` and `fob-worker lines empty-bins`.
+ * Shared core for `al-factory stations empty-bins` and `al-factory lines empty-bins`.
  *
  * The Y axis (which stations) is the caller's responsibility — it's a station
  * code for the station handler, every station in a line for the line handler.
@@ -46,7 +46,7 @@ export function shouldWipeIntakeRegistry(argv) {
  *   - kind: 'file' — a sibling file like intake-registry.jsonl
  *
  * Bins/files that don't exist on disk surface with `exists: false` so the
- * preview can show "—" rather than "0" — matches the `fob-worker stations status`
+ * preview can show "—" rather than "0" — matches the `al-factory stations status`
  * rendering and avoids implying we'd create-then-delete.
  *
  * @param {object} opts
@@ -124,7 +124,7 @@ export function renderPreview(scope_label, scope_value, targets) {
  * exist are skipped quietly ("there was nothing there anyway"). `rmSync` with
  * `recursive: true, force: true` handles both directories and files.
  *
- * Worker steps recreate bin directories on demand via the framework's `bin()`
+ * Steps recreate bin directories on demand via the framework's `bin()`
  * helper, so we deliberately do NOT recreate empty dirs here.
  */
 export function wipeTargets(targets) {

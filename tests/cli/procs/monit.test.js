@@ -7,9 +7,9 @@ jest.unstable_mockModule('child_process', () => ({
   execFileSync: mockExecFileSync,
 }));
 
-const { monitWorkersHandler } = await import('../../../src/cli/procs/monit.js');
+const { monitSessionsHandler } = await import('../../../src/cli/procs/monit.js');
 
-describe('monitWorkersHandler()', () => {
+describe('monitSessionsHandler()', () => {
   let out;
 
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('monitWorkersHandler()', () => {
 
   it('should exec pm2 monit with inherited stdio', async () => {
     // Act
-    await monitWorkersHandler();
+    await monitSessionsHandler();
 
     // Assert
     expect(mockExecFileSync).toHaveBeenCalledWith('pm2', ['monit'], expect.objectContaining({ stdio: 'inherit' }));
@@ -36,7 +36,7 @@ describe('monitWorkersHandler()', () => {
     mockExecFileSync.mockImplementation(() => { throw enoent; });
 
     // Act & Assert
-    await expect(monitWorkersHandler()).rejects.toThrow(ExitError);
+    await expect(monitSessionsHandler()).rejects.toThrow(ExitError);
     expect(out.stderr).toContain('pm2 not found');
   });
 });

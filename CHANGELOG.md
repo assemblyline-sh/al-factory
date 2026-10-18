@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-19
+
+First release as `@assemblyline/al-factory`, forked from `@finopsbricks/fob-worker` 2.1.0.
+Entries below 0.1.0 are the history of `fob-worker`.
+
+### Changed
+- **BREAKING:** package `@assemblyline/al-factory`, binary `al-factory`.
+- **BREAKING:** works on factory repos built on `@assemblyline/lib-factory`: detection,
+  `steps run` and the conveyor checks look for `@assemblyline/lib-factory` and
+  `lib-factory:move_files`.
+- **BREAKING:** `config show` reports `FACTORY_LOCATION`.
+- `procs` manages factory sessions; `procs list` has a `FACTORY` column.
+- Help, errors and docs use the factory vocabulary and point at `al-orc` and
+  assemblyline.sh.
+
+### Removed
+- `steps run` no longer adds `item_snapshot` to the local task, and passes `org_id: 'local'`
+  instead of the location.
+
 ## [2.1.0] - 2026-10-03
 
 First public release. Docs: https://finopsbricks.com/docs/workers

@@ -1,32 +1,32 @@
 import { execFileSync } from 'child_process';
 
-import { resolveRunningWorker } from '../../utils/worker-processes.js';
+import { resolveRunningSession } from '../../utils/factory-processes.js';
 
 /**
- * Resolve `argv.target` to a pm2-managed running worker, or exit with a clear error.
+ * Resolve `argv.target` to a pm2-managed factory session, or exit with a clear error.
  * @param {{target?: string}} argv
- * @returns {ReturnType<typeof resolveRunningWorker>}
+ * @returns {ReturnType<typeof resolveRunningSession>}
  */
 export function requirePm2Target(argv) {
   const { target } = argv || {};
-  const key = target || 'the worker in the current directory';
-  const match = resolveRunningWorker(target);
+  const key = target || 'the factory session in the current directory';
+  const match = resolveRunningSession(target);
 
   if (!match) {
-    console.error(`No running worker matches ${target ? `"${target}"` : key}. Run "fob-worker procs list" to see running workers.`);
+    console.error(`No running factory session matches ${target ? `"${target}"` : key}. Run "al-factory procs list" to see running sessions.`);
     process.exit(1);
   }
 
   if (match.mode !== 'pm2') {
-    console.error(`Worker "${match.worker}" (pid ${match.pid}) is running directly, not under pm2 — can't manage it this way.`);
-    console.error(`Kill it manually: kill ${match.pid}  (see "fob-worker procs list" for details)`);
+    console.error(`Factory session "${match.factory}" (pid ${match.pid}) is running directly, not under pm2 — can't manage it this way.`);
+    console.error(`Kill it manually: kill ${match.pid}  (see "al-factory procs list" for details)`);
     process.exit(1);
   }
 
   return match;
 }
 
-export async function stopWorkerHandler(argv) {
+export async function stopSessionHandler(argv) {
   const match = requirePm2Target(argv);
   execFileSync('pm2', ['stop', match.pm2], { stdio: 'inherit' });
 }

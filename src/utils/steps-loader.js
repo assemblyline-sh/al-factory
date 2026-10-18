@@ -1,12 +1,12 @@
 /**
  * Steps registry loader
  *
- * Discovers steps by scanning the worker's steps directory.
- * Uses lib-worker's discoverSteps() for filesystem-based discovery.
+ * Discovers steps by scanning the factory's steps directory.
+ * Uses lib-factory's discoverSteps() for filesystem-based discovery.
  */
 
 import fs from 'fs';
-import { loadLibWorker, getLibWorker } from './lib-worker-loader.js';
+import { loadLibFactory, getLibFactory } from './lib-factory-loader.js';
 import { loadConfig } from './config.js';
 
 /**
@@ -19,8 +19,8 @@ export async function loadSteps(stepsDir) {
     throw new Error(`Steps directory not found: ${stepsDir}`);
   }
 
-  const libWorker = await loadLibWorker();
-  return libWorker.discoverSteps(stepsDir);
+  const libFactory = await loadLibFactory();
+  return libFactory.discoverSteps(stepsDir);
 }
 
 /**
@@ -43,7 +43,7 @@ export function getHandler(steps, slug) {
   const step = steps[slug];
   if (!step) return null;
 
-  const { createHandler } = getLibWorker();
+  const { createHandler } = getLibFactory();
   return createHandler(step);
 }
 
@@ -52,9 +52,9 @@ export function getHandler(steps, slug) {
  * @returns {Promise<string[]>} Array of step slugs
  */
 export async function getStepSlugs() {
-  // Step discovery logs "[Worker] Discovered N steps…" to stdout from inside
-  // lib-worker. During completion, stdout *is* the candidate list — bash splits
-  // it on whitespace, so that one line adds 6 bogus candidates ("[Worker]",
+  // Step discovery logs "[Factory] Discovered N steps…" to stdout from inside
+  // lib-factory. During completion, stdout *is* the candidate list — bash splits
+  // it on whitespace, so that one line adds 6 bogus candidates ("[Factory]",
   // "Discovered", "44", …). Silence stdout for the duration of the load; stderr
   // is untouched, so real errors still surface.
   const write = process.stdout.write.bind(process.stdout);

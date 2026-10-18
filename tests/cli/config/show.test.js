@@ -52,7 +52,7 @@ describe('showConfigHandler()', () => {
     mockGetRelevantEnvVars.mockReturnValue({
       ORCHESTRATOR_URL: 'https://orchestrator.example.com',
       ORCHESTRATOR_API_KEY: '***',
-      WORKER_LOCATION: 'acme',
+      FACTORY_LOCATION: 'acme',
     });
 
     // Act
@@ -71,7 +71,7 @@ describe('showConfigHandler()', () => {
     mockGetRelevantEnvVars.mockReturnValue({
       ORCHESTRATOR_URL: undefined,
       ORCHESTRATOR_API_KEY: undefined,
-      WORKER_LOCATION: undefined,
+      FACTORY_LOCATION: undefined,
     });
 
     // Act

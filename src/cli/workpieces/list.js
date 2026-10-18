@@ -11,7 +11,7 @@ import {
 } from '../../utils/line-state.js';
 
 /**
- * `fob-worker workpieces list [--line] [--bin] [--match]` — operational dashboard
+ * `al-factory workpieces list [--line] [--bin] [--match]` — operational dashboard
  * over workpieces sitting on disk under temp/stations/.
  *
  * Scope (all are optional; layered when combined):
@@ -32,7 +32,7 @@ export async function listWorkpiecesHandler(argv) {
       console.log(JSON.stringify({ header: 'Workpieces', workpieces: [] }, null, 2));
       return;
     }
-    console.log('No lines found in .orchestrator/stations/. Run "fob-orc stations pull --all" to fetch station files.');
+    console.log('No lines found in .orchestrator/stations/. Run "al-orc stations pull --all" to fetch station files.');
     return;
   }
 

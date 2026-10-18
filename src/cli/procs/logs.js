@@ -2,7 +2,7 @@ import { execFileSync } from 'child_process';
 
 import { requirePm2Target } from './stop.js';
 
-export async function logsWorkerHandler(argv) {
+export async function logsSessionHandler(argv) {
   const match = requirePm2Target(argv);
 
   try {

@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
-const bin = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'bin', 'fob-worker.js');
+const bin = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'bin', 'al-factory.js');
 
 /** Run `<command> --help` and return the heading lines in the order shown. */
 function helpHeadings(args) {

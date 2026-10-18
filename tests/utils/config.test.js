@@ -85,7 +85,7 @@ describe('getRelevantEnvVars()', () => {
   beforeEach(() => {
     original = {
       ORCHESTRATOR_URL: process.env.ORCHESTRATOR_URL,
-      WORKER_LOCATION: process.env.WORKER_LOCATION,
+      FACTORY_LOCATION: process.env.FACTORY_LOCATION,
       ORCHESTRATOR_API_KEY: process.env.ORCHESTRATOR_API_KEY,
       ORCHESTRATOR_API_SECRET: process.env.ORCHESTRATOR_API_SECRET,
     };
@@ -109,15 +109,15 @@ describe('getRelevantEnvVars()', () => {
     expect(result.ORCHESTRATOR_URL).toBe('https://api.example.com');
   });
 
-  it('should return WORKER_LOCATION as-is when set', () => {
+  it('should return FACTORY_LOCATION as-is when set', () => {
     // Arrange
-    process.env.WORKER_LOCATION = 'acme';
+    process.env.FACTORY_LOCATION = 'acme';
 
     // Act
     const result = getRelevantEnvVars();
 
     // Assert
-    expect(result.WORKER_LOCATION).toBe('acme');
+    expect(result.FACTORY_LOCATION).toBe('acme');
   });
 
   it('should reveal no characters of a long ORCHESTRATOR_API_KEY', () => {
@@ -145,7 +145,7 @@ describe('getRelevantEnvVars()', () => {
   it('should return undefined for unset vars', () => {
     // Arrange
     delete process.env.ORCHESTRATOR_URL;
-    delete process.env.WORKER_LOCATION;
+    delete process.env.FACTORY_LOCATION;
     delete process.env.ORCHESTRATOR_API_KEY;
     delete process.env.ORCHESTRATOR_API_SECRET;
 
@@ -154,7 +154,7 @@ describe('getRelevantEnvVars()', () => {
 
     // Assert
     expect(result.ORCHESTRATOR_URL).toBeUndefined();
-    expect(result.WORKER_LOCATION).toBeUndefined();
+    expect(result.FACTORY_LOCATION).toBeUndefined();
     expect(result.ORCHESTRATOR_API_KEY).toBeUndefined();
     expect(result.ORCHESTRATOR_API_SECRET).toBeUndefined();
   });

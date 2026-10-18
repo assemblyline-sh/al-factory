@@ -1,5 +1,5 @@
 /**
- * Synthetic worker-repo fixtures: station files under `.orchestrator/stations/`
+ * Synthetic factory-repo fixtures: station files under `.orchestrator/stations/`
  * and bins under `temp/stations/{station}/{bin}/`.
  */
 

@@ -6,7 +6,7 @@
  *
  * Line membership is encoded by the `line` field (a line code) inside each
  * station JSON, not by folder hierarchy — this avoids the redundant-data drift
- * risk of nesting by line. The line file is where the worker location lives.
+ * risk of nesting by line. The line file is where the location lives.
  *
  * Scenarios: .orchestrator/scenarios/<slug>/
  */
@@ -154,7 +154,7 @@ export function listLocalStationIds() {
 
 /**
  * Load every local station JSON, returning the parsed objects with their source paths.
- * Used by `fob stations` / `fob lines` to derive line topology from local files.
+ * Used by `al-factory stations` / `al-factory lines` to derive line topology from local files.
  * @returns {Array<{filepath: string, dir: string, line: string|null, data: object}>}
  */
 export function listLocalStations() {
@@ -177,7 +177,7 @@ export function listLocalStations() {
 
 /**
  * Load every local line JSON (`.orchestrator/lines/*.json`), keyed by code.
- * A line owns the worker `location`; stations inherit it through their `line` code.
+ * A line owns the `location`; stations inherit it through their `line` code.
  * @returns {Object<string, {id?: string, code: string, name?: string, description?: string|null, location: string}>}
  */
 export function listLocalLines() {
@@ -390,10 +390,10 @@ export function saveScenario(stepSlug, scenarioName, config) {
 // ============================================================================
 //
 // Station scenarios are flat key→value JSONs of step-config overrides applied
-// to a whole station run via `fob-worker stations run <id> --scenario <name>`. They
+// to a whole station run via `al-factory stations run <id> --scenario <name>`. They
 // live under `.orchestrator/scenarios/stations/<short_code>/<name>.json`, keyed
 // by short_code (stable + human-readable). The orchestrator shallow-merges
-// every key into every step's config — zod on the worker strips keys a step
+// every key into every step's config — zod in the factory strips keys a step
 // does not declare.
 
 function getScenarioDirForStation(stationShortCode) {

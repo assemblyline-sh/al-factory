@@ -1,10 +1,10 @@
 {
-  "name": "@finopsbricks/fob-worker",
-  "version": "2.1.0",
-  "description": "Run and debug FinOpsBricks Orchestrator worker steps locally, and inspect lines, stations and workpieces",
+  "name": "@assemblyline/al-factory",
+  "version": "0.1.0",
+  "description": "Run and debug Assembly Line factory steps locally, and inspect lines, stations, workpieces and factory sessions",
   "type": "module",
   "bin": {
-    "fob-worker": "./bin/fob-worker.js"
+    "al-factory": "./bin/al-factory.js"
   },
   "exports": {
     ".": "./src/index.js"
@@ -16,21 +16,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/finopsbricks/fob-worker.git"
+    "url": "git+https://github.com/assemblyline-sh/al-factory.git"
   },
-  "homepage": "https://finopsbricks.com/cli/fob-worker",
+  "homepage": "https://assemblyline.sh",
   "bugs": {
-    "url": "https://github.com/finopsbricks/fob-worker/issues"
+    "url": "https://github.com/assemblyline-sh/al-factory/issues"
   },
   "keywords": [
     "cli",
-    "finopsbricks",
+    "assembly-line",
+    "factory",
     "orchestrator",
-    "worker",
     "workflow",
     "pm2"
   ],
-  "author": "FinOpsBricks",
+  "author": "Assembly Line",
   "license": "Apache-2.0",
   "files": [
     "bin",

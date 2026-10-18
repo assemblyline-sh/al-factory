@@ -1,13 +1,13 @@
 ---
 name: Bug report
-about: Something fob-worker does wrong
+about: Something al-factory does wrong
 labels: bug
 ---
 
 **Command**
 
 ```
-fob-worker …
+al-factory …
 ```
 
 **What happened** (run with `DEBUG=1`; remove credentials and business data)
@@ -18,7 +18,7 @@ fob-worker …
 **What you expected**
 
 **Environment**
-- fob-worker version (`fob-worker --version`):
-- `@fob/lib-worker` version in the worker repo:
+- al-factory version (`al-factory --version`):
+- `@assemblyline/lib-factory` version in the factory repo:
 - Node version (`node --version`):
 - OS:

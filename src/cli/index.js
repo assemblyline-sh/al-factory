@@ -1,12 +1,12 @@
 /**
- * CLI entry point using yargs — the LOCAL worker plane.
+ * CLI entry point using yargs — the LOCAL factory plane.
  *
- * Pattern: fob-worker <resource> <action> [target] [options]
+ * Pattern: al-factory <resource> <action> [target] [options]
  *
- * This is the machine-local half of the old `fob` CLI: step execution, local
+ * This is the machine-local half of the old `fob` CLI (FinOpsBricks): step execution, local
  * run-state (temp/stations/ → lines/workpieces/bins), and pm2 processes. The
  * orchestrator control plane (canonical station defs, work records, tags,
- * supporting docs) now lives in the sibling `fob-orc` CLI / `@finopsbricks/fob-orc` client.
+ * supporting docs) now lives in the sibling `al-orc` CLI / `@assemblyline/al-orc` client.
  */
 
 import { readFileSync } from 'node:fs';
@@ -19,12 +19,12 @@ import { localOptions } from './_helpers.js';
 
 import { showConfigHandler } from './config/show.js';
 import { updateStepMetadataHandler } from './stations/update-step-metadata.js';
-import { listWorkersHandler } from './procs/list.js';
-import { startWorkerHandler } from './procs/start.js';
-import { stopWorkerHandler } from './procs/stop.js';
-import { restartWorkerHandler } from './procs/restart.js';
-import { logsWorkerHandler } from './procs/logs.js';
-import { monitWorkersHandler } from './procs/monit.js';
+import { listSessionsHandler } from './procs/list.js';
+import { startSessionHandler } from './procs/start.js';
+import { stopSessionHandler } from './procs/stop.js';
+import { restartSessionHandler } from './procs/restart.js';
+import { logsSessionHandler } from './procs/logs.js';
+import { monitSessionsHandler } from './procs/monit.js';
 import { listStepsHandler } from './steps/list.js';
 import { runStepHandler } from './steps/run.js';
 import { listLinesHandler } from './lines/list.js';
@@ -40,7 +40,7 @@ import { getStepSlugs } from '../utils/steps-loader.js';
 
 // Read our own package.json: yargs' default --version looks for the nearest
 // package.json from the working directory, which is the host project's when
-// fob-worker is installed as a dependency.
+// al-factory is installed as a dependency.
 const { version } = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8'));
 
 /**
@@ -57,8 +57,8 @@ function withSeparator(handler) {
 }
 
 /**
- * Bin-selector flags shared by `fob-worker stations empty-bins` and
- * `fob-worker lines empty-bins`. Kept in one place so the two stay in sync.
+ * Bin-selector flags shared by `al-factory stations empty-bins` and
+ * `al-factory lines empty-bins`. Kept in one place so the two stay in sync.
  */
 function withBinSelectorFlags(yargs) {
   return localOptions(yargs)
@@ -74,8 +74,8 @@ function withBinSelectorFlags(yargs) {
 }
 
 /**
- * Build the subcommand tree for `fob-worker stations` — LOCAL run-state only.
- * (Canonical station definitions live in `fob-orc stations`.)
+ * Build the subcommand tree for `al-factory stations` — LOCAL run-state only.
+ * (Canonical station definitions live in `al-orc stations`.)
  */
 function buildStationSubcommands(yargs) {
   return yargs
@@ -94,8 +94,8 @@ function buildStationSubcommands(yargs) {
       (argv) => {
         if (argv.getYargsCompletions) return;
         if (!argv.id) {
-          console.error('Usage: fob-worker stations status <short_code>');
-          console.error('Pass the station short_code (e.g. VM3). Run "fob-worker lines status" to see active lines.');
+          console.error('Usage: al-factory stations status <short_code>');
+          console.error('Pass the station short_code (e.g. VM3). Run "al-factory lines status" to see active lines.');
           process.exit(1);
         }
         return withSeparator(statusStationHandler)(argv);
@@ -112,8 +112,8 @@ function buildStationSubcommands(yargs) {
       (argv) => {
         if (argv.getYargsCompletions) return;
         if (!argv.id) {
-          console.error('Usage: fob-worker stations empty-bins <short_code> [--all | --input | --doing | --output | --failed | --done] [--yes]');
-          console.error('Run "fob-worker stations status <short_code>" to preview bin contents first.');
+          console.error('Usage: al-factory stations empty-bins <short_code> [--all | --input | --doing | --output | --failed | --done] [--yes]');
+          console.error('Run "al-factory stations status <short_code>" to preview bin contents first.');
           process.exit(1);
         }
         return withSeparator(emptyBinsStationHandler)(argv);
@@ -133,7 +133,7 @@ function buildStationSubcommands(yargs) {
  */
 export function run(args) {
   const cli = yargs(args)
-    .scriptName('fob-worker')
+    .scriptName('al-factory')
     .usage('$0 <resource> <action> [options]')
     .command('lines', 'Inspect assembly lines (config + live state)', (yargs) => {
       return yargs
@@ -156,9 +156,9 @@ export function run(args) {
           (argv) => {
             if (argv.getYargsCompletions) return;
             if (!argv.line) {
-              console.error('Usage: fob-worker lines show <line>');
-              console.error('Run "fob-worker lines list" to see available lines.');
-              console.error('For live bin state, use "fob-worker lines status <line>".');
+              console.error('Usage: al-factory lines show <line>');
+              console.error('Run "al-factory lines list" to see available lines.');
+              console.error('For live bin state, use "al-factory lines status <line>".');
               process.exit(1);
             }
             return withSeparator(showLineHandler)(argv);
@@ -188,8 +188,8 @@ export function run(args) {
           (argv) => {
             if (argv.getYargsCompletions) return;
             if (!argv.line) {
-              console.error('Usage: fob-worker lines empty-bins <line> [--all | --input | --doing | --output | --failed | --done] [--yes]');
-              console.error('Run "fob-worker lines status <line>" to preview bin contents first.');
+              console.error('Usage: al-factory lines empty-bins <line> [--all | --input | --doing | --output | --failed | --done] [--yes]');
+              console.error('Run "al-factory lines status <line>" to preview bin contents first.');
               process.exit(1);
             }
             return withSeparator(emptyBinsLineHandler)(argv);
@@ -233,8 +233,8 @@ export function run(args) {
             if (argv.getYargsCompletions) return;
 
             if (!argv.slug) {
-              console.error('Usage: fob-worker steps run <slug>');
-              console.error('Run "fob-worker steps list" to see available steps');
+              console.error('Usage: al-factory steps run <slug>');
+              console.error('Run "al-factory steps list" to see available steps');
               process.exit(1);
             }
             return withSeparator(runStepHandler)(argv);
@@ -267,9 +267,9 @@ export function run(args) {
           (argv) => {
             if (argv.getYargsCompletions) return;
             if (!argv.id) {
-              console.error('Usage: fob-worker workpieces show <id-or-substring>');
-              console.error('Run "fob-worker workpieces list" to see workpieces on disk.');
-              console.error('For live tail, use "fob-worker workpieces watch <id>".');
+              console.error('Usage: al-factory workpieces show <id-or-substring>');
+              console.error('Run "al-factory workpieces list" to see workpieces on disk.');
+              console.error('For live tail, use "al-factory workpieces watch <id>".');
               process.exit(1);
             }
             return withSeparator(showWorkpieceHandler)(argv);
@@ -291,40 +291,40 @@ export function run(args) {
         )
         .demandCommand(1, 'Specify an action: list, show, watch');
     })
-    .command('procs', 'Manage local worker processes on this machine (pm2)', (yargs) => {
+    .command('procs', 'Manage factory sessions on this machine (pm2)', (yargs) => {
       return yargs
         .usage('$0 procs <action>')
         .command(
           'list',
-          'List locally running fob workers',
+          'List factory sessions running on this machine',
           (yargs) => localOptions(yargs).option('json', { describe: 'Output raw JSON', type: 'boolean' }),
-          withSeparator(listWorkersHandler),
+          withSeparator(listSessionsHandler),
         )
         .command(
           'start [target]',
-          'Start a worker under pm2',
-          (yargs) => yargs.positional('target', { describe: 'Path to worker repo (default: cwd)', type: 'string' }),
-          withSeparator(startWorkerHandler),
+          'Start a factory session under pm2',
+          (yargs) => yargs.positional('target', { describe: 'Path to the factory repo (default: cwd)', type: 'string' }),
+          withSeparator(startSessionHandler),
         )
         .command(
           'stop [target]',
-          'Stop a pm2-managed worker',
-          (yargs) => yargs.positional('target', { describe: 'pm2 name or worker dirname (default: cwd)', type: 'string' }),
-          withSeparator(stopWorkerHandler),
+          'Stop a pm2-managed factory session',
+          (yargs) => yargs.positional('target', { describe: 'pm2 name or factory repo dirname (default: cwd)', type: 'string' }),
+          withSeparator(stopSessionHandler),
         )
         .command(
           'restart [target]',
-          'Restart a pm2-managed worker',
-          (yargs) => yargs.positional('target', { describe: 'pm2 name or worker dirname (default: cwd)', type: 'string' }),
-          withSeparator(restartWorkerHandler),
+          'Restart a pm2-managed factory session',
+          (yargs) => yargs.positional('target', { describe: 'pm2 name or factory repo dirname (default: cwd)', type: 'string' }),
+          withSeparator(restartSessionHandler),
         )
         .command(
           'logs [target]',
-          'Tail logs for a pm2-managed worker',
-          (yargs) => yargs.positional('target', { describe: 'pm2 name or worker dirname (default: cwd)', type: 'string' }),
-          logsWorkerHandler,
+          'Tail logs for a pm2-managed factory session',
+          (yargs) => yargs.positional('target', { describe: 'pm2 name or factory repo dirname (default: cwd)', type: 'string' }),
+          logsSessionHandler,
         )
-        .command('monit', 'Interactive pm2 process monitor (CPU/RAM)', {}, monitWorkersHandler)
+        .command('monit', 'Interactive pm2 process monitor (CPU/RAM)', {}, monitSessionsHandler)
         .demandCommand(1, 'Specify an action: list, start, stop, restart, logs, monit');
     })
     .command('config', 'Show CLI configuration', (yargs) => {
@@ -349,24 +349,24 @@ export function run(args) {
       // argv._ includes the script name first, and — when the user is midway
       // through a word — the partial word last. `current` is that partial.
       // Drop it so `args` holds only *completed* words: without this,
-      // `fob-worker li<TAB>` yields args=['li'], which matches no level and
+      // `al-factory li<TAB>` yields args=['li'], which matches no level and
       // returns nothing (bare `<TAB>` worked only because '' was filtered out).
       const words = argv._.slice(1).filter((a) => a !== '');
       const args = current && words[words.length - 1] === current ? words.slice(0, -1) : words;
 
       const startsWithCurrent = (list) => (current ? list.filter((c) => c.startsWith(current)) : list);
 
-      // Resource level (fob-worker <tab>)
+      // Resource level (al-factory <tab>)
       if (args.length === 0) {
         return startsWithCurrent(RESOURCES);
       }
 
-      // Action level (fob-worker <resource> <tab>)
+      // Action level (al-factory <resource> <tab>)
       if (args.length === 1) {
         return startsWithCurrent(ACTIONS[args[0]] ?? []);
       }
 
-      // Step slugs (fob-worker steps run <tab>) — the one dynamic source.
+      // Step slugs (al-factory steps run <tab>) — the one dynamic source.
       if (args[0] === 'steps' && args[1] === 'run' && args.length === 2) {
         return getStepSlugs().then(startsWithCurrent);
       }

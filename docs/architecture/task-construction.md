@@ -17,16 +17,11 @@ Step handlers receive a `task` argument from the orchestrator in production. To 
   },
   work_record: {
     id: `local-wr-${Date.now()}`,          // synthetic
-    item_snapshot: null,                   // always null locally
     step_outputs: step_outputs,            // loaded from temp/*.json
   },
-  org_id: process.env.WORKER_LOCATION || 'local',
+  org_id: 'local',                         // no org locally
 }
 ```
-
-## item_snapshot is null
-
-`item_snapshot` holds the source entity snapshot (e.g., a bank statement) in production. Locally it is always `null`. Steps that require it will fail — this is expected for steps with live dependencies.
 
 ## step_outputs from temp/
 
@@ -53,4 +48,3 @@ Running steps in sequence chains their outputs naturally — each step's output 
 - [Steps Loading](/docs/architecture/steps-loading.md)
 - [Template Resolution](/docs/architecture/template-resolution.md)
 - [Station Files Layout](/docs/architecture/station-files-layout.md)
-- [Run steps locally](https://finopsbricks.com/docs/workers/run-steps)

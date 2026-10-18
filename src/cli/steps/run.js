@@ -1,6 +1,6 @@
 import path from 'path';
 import { loadConfig, ensureTempDir } from '../../utils/config.js';
-import { loadLibWorker } from '../../utils/lib-worker-loader.js';
+import { loadLibFactory } from '../../utils/lib-factory-loader.js';
 import { loadSteps, getHandler } from '../../utils/steps-loader.js';
 import { saveStepOutput, loadAllStepOutputs } from '../../utils/output.js';
 import { loadStation, getStepConfigFromStation, findStationsWithStep, listScenarios, loadScenario } from '../../utils/station-files.js';
@@ -12,20 +12,20 @@ export async function runStepHandler(argv) {
   const config = loadConfig();
   ensureTempDir(config.tempDir);
 
-  // Load lib-worker from the worker's node_modules (not the CLI's)
-  const { initTemplates, resolveConfig } = await loadLibWorker();
+  // Load lib-factory from the factory's node_modules (not the CLI's)
+  const { initTemplates, resolveConfig } = await loadLibFactory();
 
-  // Initialize templates relative to the worker's src directory
-  const workerSrcDir = path.dirname(config.stepsDir);
-  const workerEntryUrl = 'file://' + path.resolve(workerSrcDir, 'index.js');
-  initTemplates(workerEntryUrl);
+  // Initialize templates relative to the factory's src directory
+  const factorySrcDir = path.dirname(config.stepsDir);
+  const factoryEntryUrl = 'file://' + path.resolve(factorySrcDir, 'index.js');
+  initTemplates(factoryEntryUrl);
 
   const steps = await loadSteps(config.stepsDir);
   const handler = getHandler(steps, slug);
 
   if (!handler) {
     console.error(`Unknown step: ${slug}`);
-    console.error('Run "fob-worker steps list" to see available steps');
+    console.error('Run "al-factory steps list" to see available steps');
     process.exit(1);
   }
 
@@ -45,7 +45,7 @@ export async function runStepHandler(argv) {
     const station = loadStation(stationId);
     if (!station) {
       console.error(`Station not found locally: ${stationId}`);
-      console.error(`Run "fob-orc stations pull ${stationId}" first`);
+      console.error(`Run "al-orc stations pull ${stationId}" first`);
       process.exit(1);
     }
 
@@ -146,10 +146,9 @@ export async function runStepHandler(argv) {
     },
     work_record: {
       id: `local-wr-${Date.now()}`,
-      item_snapshot: null,
       step_outputs: step_outputs,
     },
-    org_id: process.env.WORKER_LOCATION || 'local',
+    org_id: 'local',
   };
 
   console.log('\n' + '-'.repeat(60));

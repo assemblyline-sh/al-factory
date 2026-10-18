@@ -1,24 +1,24 @@
 import { execFileSync } from 'child_process';
 import path from 'path';
 
-import { listRunningWorkers, getWorkerPackageInfo, isPm2Available } from '../../utils/worker-processes.js';
+import { listRunningSessions, getFactoryPackageInfo, isPm2Available } from '../../utils/factory-processes.js';
 
-export async function startWorkerHandler(argv) {
+export async function startSessionHandler(argv) {
   const { target } = argv || {};
   const dir = path.resolve(target || process.cwd());
 
-  const info = getWorkerPackageInfo(dir);
+  const info = getFactoryPackageInfo(dir);
   if (!info) {
-    console.error(`"${dir}" doesn't look like a fob worker repo (missing @fob/lib-worker dependency or package.json "main" field).`);
+    console.error(`"${dir}" doesn't look like a factory repo (missing @assemblyline/lib-factory dependency or package.json "main" field).`);
     process.exit(1);
   }
 
   const name = path.basename(dir);
 
-  const existing = listRunningWorkers().find((r) => r.cwd === dir);
+  const existing = listRunningSessions().find((r) => r.cwd === dir);
   if (existing) {
-    console.error(`Worker "${name}" is already running (pid ${existing.pid}, mode ${existing.mode}).`);
-    console.error('Use "fob-worker procs stop" first, or "fob-worker procs restart".');
+    console.error(`Factory session "${name}" is already running (pid ${existing.pid}, mode ${existing.mode}).`);
+    console.error('Use "al-factory procs stop" first, or "al-factory procs restart".');
     process.exit(1);
   }
 

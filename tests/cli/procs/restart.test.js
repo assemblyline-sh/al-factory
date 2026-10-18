@@ -1,20 +1,20 @@
 import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { captureOutput } from '../helpers.js';
 
-const mockResolveRunningWorker = jest.fn();
+const mockResolveRunningSession = jest.fn();
 const mockExecFileSync = jest.fn();
 
-jest.unstable_mockModule('../../../src/utils/worker-processes.js', () => ({
-  resolveRunningWorker: mockResolveRunningWorker,
+jest.unstable_mockModule('../../../src/utils/factory-processes.js', () => ({
+  resolveRunningSession: mockResolveRunningSession,
 }));
 
 jest.unstable_mockModule('child_process', () => ({
   execFileSync: mockExecFileSync,
 }));
 
-const { restartWorkerHandler } = await import('../../../src/cli/procs/restart.js');
+const { restartSessionHandler } = await import('../../../src/cli/procs/restart.js');
 
-describe('restartWorkerHandler()', () => {
+describe('restartSessionHandler()', () => {
   let out;
 
   beforeEach(() => {
@@ -28,12 +28,12 @@ describe('restartWorkerHandler()', () => {
 
   it('should call pm2 restart with the resolved pm2 name', async () => {
     // Arrange
-    mockResolveRunningWorker.mockReturnValue({ worker: 'worker-alex', pid: '123', mode: 'pm2', pm2: 'worker-alex' });
+    mockResolveRunningSession.mockReturnValue({ factory: 'factory-alex', pid: '123', mode: 'pm2', pm2: 'factory-alex' });
 
     // Act
-    await restartWorkerHandler({});
+    await restartSessionHandler({});
 
     // Assert
-    expect(mockExecFileSync).toHaveBeenCalledWith('pm2', ['restart', 'worker-alex'], expect.objectContaining({ stdio: 'inherit' }));
+    expect(mockExecFileSync).toHaveBeenCalledWith('pm2', ['restart', 'factory-alex'], expect.objectContaining({ stdio: 'inherit' }));
   });
 });

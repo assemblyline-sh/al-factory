@@ -2,14 +2,14 @@
  * Configuration
  *
  * Convention-based paths resolved relative to cwd.
- * No config file — all worker repos follow the same structure.
+ * No config file — all factory repos follow the same structure.
  */
 
 import fs from 'fs';
 import path from 'path';
 
 /**
- * Resolve convention-based paths for the current worker repo
+ * Resolve convention-based paths for the current factory repo
  * @returns {{ stepsDir: string, tempDir: string }}
  */
 export function loadConfig() {
@@ -42,7 +42,7 @@ function maskSecret(value) {
 export function getRelevantEnvVars() {
   return {
     ORCHESTRATOR_URL: process.env.ORCHESTRATOR_URL,
-    WORKER_LOCATION: process.env.WORKER_LOCATION,
+    FACTORY_LOCATION: process.env.FACTORY_LOCATION,
     ORCHESTRATOR_API_KEY: maskSecret(process.env.ORCHESTRATOR_API_KEY),
     ORCHESTRATOR_API_SECRET: maskSecret(process.env.ORCHESTRATOR_API_SECRET),
   };

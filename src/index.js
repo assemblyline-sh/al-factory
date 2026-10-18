@@ -1,9 +1,9 @@
 /**
- * @finopsbricks/fob-worker
+ * @assemblyline/al-factory
  *
- * Developer CLI for FinOpsBricks workers.
+ * Developer CLI for Assembly Line factories.
  *
- * Primary usage is via the `fob-worker` command line tool.
+ * Primary usage is via the `al-factory` command line tool.
  * This module exports utilities for programmatic use if needed.
  */
 

@@ -6,10 +6,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const bin = path.join(root, 'bin', 'fob-worker.js');
+const bin = path.join(root, 'bin', 'al-factory.js');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 
-describe('fob-worker entry point', () => {
+describe('al-factory entry point', () => {
   let cwd;
 
   /** Run the CLI from a host project whose own package.json has another version. */
@@ -18,7 +18,7 @@ describe('fob-worker entry point', () => {
   }
 
   beforeAll(() => {
-    cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'fob-worker-entry-'));
+    cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'al-factory-entry-'));
     fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify({ name: 'host', version: '9.9.9' }));
   });
 
@@ -26,7 +26,7 @@ describe('fob-worker entry point', () => {
     fs.rmSync(cwd, { recursive: true, force: true });
   });
 
-  it("should print fob-worker's own version, not the host project's", () => {
+  it("should print al-factory's own version, not the host project's", () => {
     const res = run('--version');
 
     expect(res.stdout.trim()).toBe(pkg.version);
@@ -49,8 +49,8 @@ describe('fob-worker entry point', () => {
   it('should link the docs and landing page in --help', () => {
     const res = run('--help');
 
-    expect(res.stdout).toContain('https://finopsbricks.com/docs/workers');
-    expect(res.stdout).toContain('https://finopsbricks.com/cli/fob-worker');
+    expect(res.stdout).toContain('https://assemblyline.sh/docs');
+    expect(res.stdout).toContain('https://assemblyline.sh');
   });
 
   it.each([
