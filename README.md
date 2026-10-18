@@ -1,5 +1,7 @@
 # fob-worker
 
+> **Assembly Line fork** of `~/ec2code/finopsbricks/cli/fob-worker` (remote `finopsbricks`), being converted per `engine-fork.md` in the assemblyline.sh repo. Workspace rules: `~/ec2code/assemblyline/CLAUDE.md`.
+
 Run and debug [FinOpsBricks Orchestrator](https://orchestrator.finopsbricks.com) worker steps on your own machine, and see what's sitting in each station's bins.
 
 ```bash
