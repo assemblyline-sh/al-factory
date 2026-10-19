@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Deprecated
+- al-factory is being retired. 0.1.1 is unpublished from npm and the package is deprecated
+  there. Run steps with `npx factory` (lib-factory); bins, workpieces and processes move to
+  `al-control`. Install from this repo until then.
+
 ## [0.1.1] - 2026-10-19
 
 ### Deprecated
