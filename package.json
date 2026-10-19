@@ -1,6 +1,6 @@
 {
   "name": "@assemblyline/al-factory",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Run and debug Assembly Line factory steps locally, and inspect lines, stations, workpieces and factory sessions",
   "type": "module",
   "bin": {
