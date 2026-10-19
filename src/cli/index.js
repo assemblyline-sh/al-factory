@@ -57,6 +57,19 @@ function withSeparator(handler) {
 }
 
 /**
+ * Point to the `factory` command that replaces this one. It ships with lib-factory 0.2.0,
+ * so it runs steps with the factory's own copy of the library. The notice goes to stderr
+ * so stdout stays the same.
+ */
+function withMovedNotice(command, handler) {
+  return async (argv) => {
+    console.error(`Note: this command moved into lib-factory 0.2.0. In the factory repo run: npx factory ${command}`);
+    console.error('al-factory\'s copy will be removed.');
+    return handler(argv);
+  };
+}
+
+/**
  * Bin-selector flags shared by `al-factory stations empty-bins` and
  * `al-factory lines empty-bins`. Kept in one place so the two stay in sync.
  */
@@ -123,7 +136,7 @@ function buildStationSubcommands(yargs) {
       'update-step-metadata',
       'Update step name/description in local station files from code',
       {},
-      withSeparator(updateStepMetadataHandler),
+      withMovedNotice('stations update-step-metadata', withSeparator(updateStepMetadataHandler)),
     )
     .demandCommand(1, 'Specify an action: status, empty-bins, update-step-metadata');
 }
@@ -203,7 +216,7 @@ export function run(args) {
     .command('steps', 'Work with step handlers', (yargs) => {
       return yargs
         .usage('$0 steps <action> [options]')
-        .command('list', 'List available steps', {}, withSeparator(listStepsHandler))
+        .command('list', 'List available steps', {}, withMovedNotice('steps list', withSeparator(listStepsHandler)))
         .command(
           'run [slug]',
           'Run a step locally',
@@ -237,7 +250,7 @@ export function run(args) {
               console.error('Run "al-factory steps list" to see available steps');
               process.exit(1);
             }
-            return withSeparator(runStepHandler)(argv);
+            return withMovedNotice(`steps run ${argv.slug}`, withSeparator(runStepHandler))(argv);
           }
         )
         .demandCommand(1, 'Specify an action: list, run');

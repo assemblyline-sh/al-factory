@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Deprecated
+- `steps list`, `steps run` and `stations update-step-metadata` moved into lib-factory 0.2.0
+  as the `factory` command (`npx factory steps run <slug>` in a factory repo). They still
+  work here and print a notice on stderr; they will be removed.
+
 ## [0.1.0] - 2026-10-19
 
 First release as `@assemblyline/al-factory`, forked from `@finopsbricks/fob-worker` 2.1.0.
