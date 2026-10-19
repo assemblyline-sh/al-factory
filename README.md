@@ -1,13 +1,14 @@
 # al-factory
 
-> **Deprecated.** al-factory is being retired and is not published on npm.
+> **Deprecated and archived.** Use these instead:
 >
-> - **Run a step:** use `npx factory steps run <slug>`, which ships with
+> - **Run a step:** `npx factory steps run <slug>`, which ships with
 >   [`@assemblyline/lib-factory`](https://github.com/assemblyline-sh/lib-factory) in every
 >   factory repo. `steps list` and `stations update-step-metadata` moved there too.
-> - **Bins, workpieces and processes** (`lines status`, `stations status`, `workpieces`,
->   `procs`) move to `al-control`, the control room CLI, which is not released yet. Until then,
->   install al-factory from this repo (below).
+> - **Bins, workpieces and processes:**
+>   [`al-control`](https://github.com/assemblyline-sh/al-control)
+>   (`npm install -g @assemblyline/al-control`). In a factory repo, `al-control lines status -f .`
+>   replaces `al-factory lines status`; the same goes for `stations`, `workpieces` and `procs`.
 
 Run and debug [Assembly Line](https://assemblyline.sh) factory steps on your own machine,
 see what's sitting in each station's bins, and run factory sessions under pm2.
